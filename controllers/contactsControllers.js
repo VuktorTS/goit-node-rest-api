@@ -8,6 +8,7 @@ import {
   getContactById,
   addContact,
   updateContactById,
+  removeContact,
 } from "../services/contactsServices.js";
 
 export const getAllContacts = async (req, res, next) => {
@@ -48,7 +49,6 @@ export const createContact = async (req, res, next) => {
 export const updateContact = async (req, res, next) => {
   try {
     const { error } = updateContactSchema.validate(req.body);
-    console.log(updateContactSchema.validate(req.body));
     if (error) {
       throw HttpError(400);
     }
@@ -63,4 +63,16 @@ export const updateContact = async (req, res, next) => {
   }
 };
 
-export const deleteContact = async (req, res) => {};
+export const deleteContact = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await removeContact(id);
+    console.log("result: ", result);
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
