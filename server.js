@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
-import app from "./app.js";
+import { app } from "./app.js";
 
-const { DB_HOST } = process.env();
-
+const { DB_HOST } = process.env;
 mongoose.set("strictQuery", true);
 
 mongoose
@@ -14,5 +13,5 @@ mongoose
   })
   .catch((error) => {
     console.log(error.message);
-    process.exit(1);
+    process.exit(2);
   });
