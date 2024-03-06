@@ -8,7 +8,7 @@ import {
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", ctrl.getAllContacts);
+contactsRouter.get("/", ctrl.getAll);
 
 // contactsRouter.get("/:id", ctrl.getOneContact);
 

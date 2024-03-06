@@ -1,6 +1,7 @@
 import HttpError from "../helpers/HttpError.js";
 import { controllerWraper } from "../helpers/controllerWraper.js";
-import { Contact } from "../models/contact.js";
+import { getAllContacts } from "../services/contactsServices.js";
+// import { Contact } from "../models/contact.js";
 // import {
 //   listContacts,
 //   getContactById,
@@ -9,8 +10,8 @@ import { Contact } from "../models/contact.js";
 //   removeContact,
 // } from "../services/contactsServices.js";
 
-const getAllContacts = async (req, res) => {
-  const result = await Contact.find();
+const getAll = async (req, res) => {
+  const result = await getAllContacts();
   res.status(200).json(result);
 };
 
@@ -47,7 +48,7 @@ const getAllContacts = async (req, res) => {
 //   res.status(200).json(result);
 // };
 export default {
-  getAllContacts: controllerWraper(getAllContacts),
+  getAll: controllerWraper(getAll),
   // getOneContact: controllerWraper(getOneContact),
   // createContact: controllerWraper(createContact),
   // updateContact: controllerWraper(updateContact),
