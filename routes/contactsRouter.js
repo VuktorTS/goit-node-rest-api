@@ -14,7 +14,7 @@ contactsRouter.get("/", ctrl.getAll);
 
 // contactsRouter.delete("/:id", ctrl.deleteContact);
 
-// contactsRouter.post("/", validateBody(createContactSchema), ctrl.createContact);
+contactsRouter.post("/", validateBody(createContactSchema), ctrl.createContact);
 
 // contactsRouter.put(
 //   "/:id",
