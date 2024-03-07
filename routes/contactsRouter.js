@@ -22,6 +22,6 @@ contactsRouter.put(
   ctrl.updateContact
 );
 
-// contactsRouter.delete("/:id", isValidId, ctrl.deleteContact);
+contactsRouter.delete("/:id", isValidId, ctrl.deleteContact);
 
 export default contactsRouter;

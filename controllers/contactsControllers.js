@@ -2,6 +2,7 @@ import HttpError from "../helpers/HttpError.js";
 import { controllerWraper } from "../helpers/controllerWraper.js";
 import {
   addContacts,
+  deleteContactById,
   getAllContacts,
   getContactById,
   updateContactById,
@@ -34,19 +35,19 @@ const updateContact = async (req, res) => {
   res.status(200).json(result);
 };
 
-// const deleteContact = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await removeContact(id);
-//   console.log("result: ", result);
-//   if (!result) {
-//     throw HttpError(404);
-//   }
-//   res.status(200).json(result);
-// };
+const deleteContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await deleteContactById(id);
+  console.log("result: ", result);
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.status(200).json(result);
+};
 export default {
   getAll: controllerWraper(getAll),
   getOneContact: controllerWraper(getOneContact),
   createContact: controllerWraper(createContact),
   updateContact: controllerWraper(updateContact),
-  // deleteContact: controllerWraper(deleteContact),
+  deleteContact: controllerWraper(deleteContact),
 };
