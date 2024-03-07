@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { handleSaveError } from "./hooks.js";
 
 const contactSchema = new Schema(
   {
@@ -15,12 +16,16 @@ const contactSchema = new Schema(
       type: String,
       required: true,
     },
-    faforite: {
+    favorite: {
       type: Boolean,
       default: false,
     },
   },
   { versionKey: false, timestamps: true }
 );
-export const Contact = model("contact", contactSchema);
-// test gitHube
+
+contactSchema.post("save", handleSaveError);
+
+const Contact = model("contact", contactSchema);
+
+export default Contact;

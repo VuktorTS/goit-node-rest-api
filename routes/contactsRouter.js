@@ -5,21 +5,23 @@ import {
   createContactSchema,
   updateContactSchema,
 } from "../schemas/contactsSchemas.js";
+import isValidId from "../middlewares/isValidId.js";
 
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", ctrl.getAll);
 
-// contactsRouter.get("/:id", ctrl.getOneContact);
-
-// contactsRouter.delete("/:id", ctrl.deleteContact);
+contactsRouter.get("/:id", isValidId, ctrl.getOneContact);
 
 contactsRouter.post("/", validateBody(createContactSchema), ctrl.createContact);
 
-// contactsRouter.put(
-//   "/:id",
-//   validateBody(updateContactSchema),
-//   ctrl.updateContact
-// );
+contactsRouter.put(
+  "/:id",
+  isValidId,
+  validateBody(updateContactSchema),
+  ctrl.updateContact
+);
+
+// contactsRouter.delete("/:id", isValidId, ctrl.deleteContact);
 
 export default contactsRouter;
