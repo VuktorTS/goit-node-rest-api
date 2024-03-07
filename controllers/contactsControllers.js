@@ -6,6 +6,7 @@ import {
   getAllContacts,
   getContactById,
   updateContactById,
+  updateStatusContactById,
 } from "../services/contactsServices.js";
 const getAll = async (_, res) => {
   const result = await getAllContacts();
@@ -44,10 +45,21 @@ const deleteContact = async (req, res) => {
   }
   res.status(200).json(result);
 };
+
+const updateStatusContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await updateStatusContactById(id, req.body);
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.status(200).json(result);
+};
+
 export default {
   getAll: controllerWraper(getAll),
   getOneContact: controllerWraper(getOneContact),
   createContact: controllerWraper(createContact),
   updateContact: controllerWraper(updateContact),
   deleteContact: controllerWraper(deleteContact),
+  updateStatusContact: controllerWraper(updateStatusContact),
 };

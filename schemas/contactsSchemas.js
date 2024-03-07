@@ -34,3 +34,6 @@ export const updateContactSchema = Joi.object({
   .messages({
     "object.min": "Body must have at least {{#limit}} field",
   });
+export const updateContactStatusSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
