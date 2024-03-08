@@ -15,6 +15,7 @@ export const createContactSchema = Joi.object({
       "wrong phone format. the phone number must be in the format (000) 000-0000",
     "any.required": "missing required phone field",
   }),
+  favorite: Joi.boolean(),
 });
 
 export const updateContactSchema = Joi.object({
@@ -27,8 +28,12 @@ export const updateContactSchema = Joi.object({
     "string.pattern.base":
       "wrong phone format. the phone number must be in the format (000) 000-0000",
   }),
+  favorite: Joi.boolean(),
 })
   .min(1)
   .messages({
     "object.min": "Body must have at least {{#limit}} field",
   });
+export const updateContactStatusSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
