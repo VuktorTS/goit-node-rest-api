@@ -1,13 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 import { controllerWraper } from "../helpers/controllerWraper.js";
-import {
-  addContacts,
-  deleteContactById,
-  getAllContacts,
-  getContactById,
-  updateContactById,
-  updateStatusContactById,
-} from "../services/contactsServices.js";
+import * as contactServices from "../services/contactsServices.js";
 const getAll = async (_, res) => {
   const result = await getAllContacts();
   res.json(result);
@@ -15,7 +8,7 @@ const getAll = async (_, res) => {
 
 const getOneContact = async (req, res) => {
   const { id } = req.params;
-  const result = await getContactById(id);
+  const result = await contactServices.getContactById(id);
   if (!result) {
     throw HttpError(404, `Contact with id=${id} not found`);
   }
@@ -23,13 +16,13 @@ const getOneContact = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-  const result = await addContacts(req.body);
+  const result = await contactServices.addContacts(req.body);
   res.status(201).json(result);
 };
 
 const updateContact = async (req, res) => {
   const { id } = req.params;
-  const result = await updateContactById(id, req.body);
+  const result = await contactServices.updateContactById(id, req.body);
   if (!result) {
     throw HttpError(404);
   }
@@ -38,7 +31,7 @@ const updateContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const result = await deleteContactById(id);
+  const result = await contactServices.deleteContactById(id);
   console.log("result: ", result);
   if (!result) {
     throw HttpError(404);
@@ -48,7 +41,7 @@ const deleteContact = async (req, res) => {
 
 const updateStatusContact = async (req, res) => {
   const { id } = req.params;
-  const result = await updateStatusContactById(id, req.body);
+  const result = await contactServices.updateStatusContactById(id, req.body);
   if (!result) {
     throw HttpError(404);
   }
