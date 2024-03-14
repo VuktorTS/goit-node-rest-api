@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import { handleSaveError, setUpdateSettings } from "./hooks";
 import { emailRegExp } from "../constants/user_constants";
 
-const userShema = new Schema(
+const userSchema = new Schema(
   {
     username: {
       type: String,
@@ -22,10 +22,10 @@ const userShema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-userShema.post("save", handleSaveError);
-userShema.pre("findOneAndUpdate", setUpdateSettings);
-userShema.post("findOneAndUpdate", handleSaveError);
+userSchema.post("save", handleSaveError);
+userSchema.pre("findOneAndUpdate", setUpdateSettings);
+userSchema.post("findOneAndUpdate", handleSaveError);
 
-const User = model("user", userShema);
+const User = model("user", userSchema);
 
 export default User;
