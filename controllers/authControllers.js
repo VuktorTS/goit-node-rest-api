@@ -14,6 +14,24 @@ const signup = async (req, res) => {
   res.status(201).json({ username: newUser.username, email: newUser.email });
 };
 
+const signin = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await authServices.findUser({ email });
+  if (!user) {
+    throw HttpError(401, "Email or password no valid");
+  }
+  const comparePassword = await authServices.validatePassword(
+    password,
+    user.password
+  );
+  if (!comparePassword) {
+    throw HttpError(401, "Email or password no valid");
+  }
+  const token = "123.123.123";
+  res.json({ token });
+};
+
 export default {
   signup: controllerWraper(signup),
+  signin: controllerWraper(signin),
 };
