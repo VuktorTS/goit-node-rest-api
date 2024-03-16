@@ -1,6 +1,6 @@
 import Contact from "../models/contact.js";
 
-export const getAllContacts = () => Contact.find();
+export const getAllContacts = (filter = {}) => Contact.find(filter);
 
 export const getContactById = (id) => Contact.findById(id);
 

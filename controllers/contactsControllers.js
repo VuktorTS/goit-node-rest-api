@@ -1,8 +1,9 @@
 import HttpError from "../helpers/HttpError.js";
 import { controllerWraper } from "../helpers/controllerWraper.js";
 import * as contactServices from "../services/contactsServices.js";
-const getAll = async (_, res) => {
-  const result = await contactServices.getAllContacts();
+const getAll = async (req, res) => {
+  const { _id: owner } = req.user;
+  const result = await contactServices.getAllContacts({ owner });
   res.json(result);
 };
 
@@ -16,7 +17,8 @@ const getOneContact = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-  const result = await contactServices.addContacts(req.body);
+  const { _id: owner } = req.user;
+  const result = await contactServices.addContacts({ ...req.body, owner });
   res.status(201).json(result);
 };
 
