@@ -2,7 +2,7 @@ import HttpError from "../helpers/HttpError.js";
 import { controllerWraper } from "../helpers/controllerWraper.js";
 import * as contactServices from "../services/contactsServices.js";
 const getAll = async (_, res) => {
-  const result = await getAllContacts();
+  const result = await contactServices.getAllContacts();
   res.json(result);
 };
 
