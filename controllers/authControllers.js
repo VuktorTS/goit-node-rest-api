@@ -1,6 +1,9 @@
+import jwt from "jsonwebtoken";
 import * as authServices from "../services/authServices.js";
 import { controllerWraper } from "../helpers/controllerWraper.js";
 import HttpError from "../helpers/HttpError.js";
+
+const { JWT_SEKRET } = process.env;
 
 const signup = async (req, res) => {
   const { email } = req.body;
@@ -17,17 +20,26 @@ const signup = async (req, res) => {
 const signin = async (req, res) => {
   const { email, password } = req.body;
   const user = await authServices.findUser({ email });
+
   if (!user) {
     throw HttpError(401, "Email or password no valid");
   }
+
   const comparePassword = await authServices.validatePassword(
     password,
     user.password
   );
+
   if (!comparePassword) {
     throw HttpError(401, "Email or password no valid");
   }
-  const token = "123.123.123";
+
+  const { _id: id } = user;
+  const payload = {
+    id,
+  };
+  const token = jwt.sign(payload, JWT_SEKRET, { expiresIn: "23h" });
+
   res.json({ token });
 };
 
