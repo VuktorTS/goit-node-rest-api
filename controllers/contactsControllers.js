@@ -3,7 +3,12 @@ import { controllerWraper } from "../helpers/controllerWraper.js";
 import * as contactServices from "../services/contactsServices.js";
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await contactServices.getAllContacts({ owner });
+  const { page = 3, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await contactServices.getAllContacts(
+    { owner },
+    { skip, limit }
+  );
   res.json(result);
 };
 

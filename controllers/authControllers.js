@@ -43,7 +43,12 @@ const signin = async (req, res) => {
   res.json({ token });
 };
 
+const getCurrent = async (req, res) => {
+  const { username, email } = req.user;
+  res.json({ username, email });
+};
 export default {
   signup: controllerWraper(signup),
   signin: controllerWraper(signin),
+  getCurrent: controllerWraper(getCurrent),
 };
