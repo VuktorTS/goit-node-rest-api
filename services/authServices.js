@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 export const findUser = (filter) => User.findOne(filter);
 
-export const signup = async (date) => {
+export const register = async (date) => {
   const hashPassword = await bcrypt.hash(date.password, 10);
   return User.create({ ...date, password: hashPassword });
 };

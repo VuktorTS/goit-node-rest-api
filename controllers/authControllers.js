@@ -5,7 +5,7 @@ import HttpError from "../helpers/HttpError.js";
 
 const { JWT_SEKRET } = process.env;
 
-const signup = async (req, res) => {
+const register = async (req, res) => {
   const { email } = req.body;
   const user = await authServices.findUser({ email });
 
@@ -13,11 +13,16 @@ const signup = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
 
-  const newUser = await authServices.signup(req.body);
-  res.status(201).json({ username: newUser.username, email: newUser.email });
+  const newUser = await authServices.register(req.body);
+  res.status(201).json({
+    user: {
+      email: newUser.email,
+      subscription: "starter",
+    },
+  });
 };
 
-const signin = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await authServices.findUser({ email });
 
@@ -34,29 +39,38 @@ const signin = async (req, res) => {
     throw HttpError(401, "Email or password no valid");
   }
 
-  const { _id: id } = user;
+  const { _id: id, subscription } = user;
   const payload = {
     id,
   };
   const token = jwt.sign(payload, JWT_SEKRET, { expiresIn: "23h" });
   await authServices.updateUser({ _id: id }, { token });
-  res.json({ token });
+  res.json({
+    token,
+    user: {
+      email,
+      subscription,
+    },
+  });
 };
 
 const getCurrent = async (req, res) => {
-  const { username, email } = req.user;
-  res.json({ username, email });
+  const { email, subscription } = req.user;
+  res.json({
+    email,
+    subscription,
+  });
 };
 
-const signout = async (req, res) => {
+const logout = async (req, res) => {
   const { _id } = req.user;
   await authServices.updateUser({ _id }, { token: "" });
-  res.json({ message: "Signout success" });
+  res.status(204).end();
 };
 
 export default {
-  signup: controllerWraper(signup),
-  signin: controllerWraper(signin),
+  register: controllerWraper(register),
+  login: controllerWraper(login),
   getCurrent: controllerWraper(getCurrent),
-  signout: controllerWraper(signout),
+  logout: controllerWraper(logout),
 };
