@@ -3,55 +3,66 @@ import { controllerWraper } from "../helpers/controllerWraper.js";
 import * as contactServices from "../services/contactsServices.js";
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 3, limit = 10 } = req.query;
+  const { page = 1, limit = 10, favorite } = req.query;
   const skip = (page - 1) * limit;
-  const result = await contactServices.getAllContacts(
-    { owner },
-    { skip, limit }
-  );
+
+  const filter = { owner };
+  if (favorite) {
+    filter.favorite = favorite;
+  }
+
+  const result = await contactServices.getAllContacts(filter, { skip, limit });
   res.json(result);
 };
 
 const getOneContact = async (req, res) => {
   const { id } = req.params;
   const result = await contactServices.getContactById(id);
+
   if (!result) {
     throw HttpError(404, `Contact with id=${id} not found`);
   }
+
   res.status(200).json(result);
 };
 
 const createContact = async (req, res) => {
   const { _id: owner } = req.user;
   const result = await contactServices.addContacts({ ...req.body, owner });
+
   res.status(201).json(result);
 };
 
 const updateContact = async (req, res) => {
   const { id } = req.params;
   const result = await contactServices.updateContactById(id, req.body);
+
   if (!result) {
     throw HttpError(404);
   }
+
   res.status(200).json(result);
 };
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
   const result = await contactServices.deleteContactById(id);
-  console.log("result: ", result);
+
   if (!result) {
     throw HttpError(404);
   }
+
   res.status(200).json(result);
 };
 
 const updateStatusContact = async (req, res) => {
   const { id } = req.params;
   const result = await contactServices.updateStatusContactById(id, req.body);
+
   if (!result) {
     throw HttpError(404);
   }
+
   res.status(200).json(result);
 };
 
