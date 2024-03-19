@@ -67,10 +67,17 @@ const logout = async (req, res) => {
   await authServices.updateUser({ _id }, { token: "" });
   res.status(204).end();
 };
+const updateUserSubscription = async (req, res) => {
+  const { _id } = req.user;
+  const { subscription } = req.body;
+  await authServices.updateUser({ _id }, { subscription });
+  res.status(204).end();
+};
 
 export default {
   register: controllerWraper(register),
   login: controllerWraper(login),
   getCurrent: controllerWraper(getCurrent),
   logout: controllerWraper(logout),
+  updateUserSubscription: controllerWraper(updateUserSubscription),
 };

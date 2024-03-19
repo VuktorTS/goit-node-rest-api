@@ -5,6 +5,7 @@ import { userRegisterSchema, userLoginSchema } from "../schemas/userSchemas.js";
 import authenticate from "../middlewares/authenticate.js";
 
 const authRouter = express.Router();
+authRouter.patch("/", authenticate, authController.updateUserSubscription);
 authRouter.post(
   "/register",
   validateBody(userRegisterSchema),
