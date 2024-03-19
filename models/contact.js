@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { handleSaveError, setUpdateSettings } from "./hooks.js";
+import { phoneRegExp } from "../constants/user_constants.js";
 
 const contactSchema = new Schema(
   {
@@ -14,6 +15,7 @@ const contactSchema = new Schema(
     },
     phone: {
       type: String,
+      match: phoneRegExp,
       required: true,
     },
     favorite: {

@@ -44,6 +44,7 @@ const login = async (req, res) => {
     id,
   };
   const token = jwt.sign(payload, JWT_SEKRET, { expiresIn: "23h" });
+
   await authServices.updateUser({ _id: id }, { token });
   res.json({
     token,
@@ -56,6 +57,7 @@ const login = async (req, res) => {
 
 const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
+
   res.json({
     email,
     subscription,
@@ -64,12 +66,14 @@ const getCurrent = async (req, res) => {
 
 const logout = async (req, res) => {
   const { _id } = req.user;
+
   await authServices.updateUser({ _id }, { token: "" });
   res.status(204).end();
 };
 const updateUserSubscription = async (req, res) => {
   const { _id } = req.user;
   const { subscription } = req.body;
+  
   await authServices.updateUser({ _id }, { subscription });
   res.status(204).end();
 };
