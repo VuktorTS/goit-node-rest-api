@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { phoneRegExp } from "../constants/user_constants";
+import { phoneRegExp } from "../constants/user_constants.js";
 
 export const createContactSchema = Joi.object({
   name: Joi.string().required().empty().messages({
