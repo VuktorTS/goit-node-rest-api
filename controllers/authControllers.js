@@ -2,24 +2,27 @@ import jwt from "jsonwebtoken";
 import * as authServices from "../services/authServices.js";
 import { controllerWraper } from "../helpers/controllerWraper.js";
 import HttpError from "../helpers/HttpError.js";
+import gravatar from "gravatar";
 
 const { JWT_SEKRET } = process.env;
 
 const register = async (req, res) => {
   const { email } = req.body;
-  const user = await authServices.findUser({ email });
+  const url = gravatar.url(`${email}`, { s: "100", r: "x", d: "retro" }, false);
+  // const user = await authServices.findUser({ email });
+  console.log("url: ", url);
 
-  if (user) {
-    throw HttpError(409, "Email in use");
-  }
+  // if (user) {
+  //   throw HttpError(409, "Email in use");
+  // }
 
-  const newUser = await authServices.register(req.body);
-  res.status(201).json({
-    user: {
-      email: newUser.email,
-      subscription: "starter",
-    },
-  });
+  // const newUser = await authServices.register(req.body);
+  // res.status(201).json({
+  //   user: {
+  //     email: newUser.email,
+  //     subscription: "starter",
+  //   },
+  // });
 };
 
 const login = async (req, res) => {
@@ -73,7 +76,7 @@ const logout = async (req, res) => {
 const updateUserSubscription = async (req, res) => {
   const { _id } = req.user;
   const { subscription } = req.body;
-  
+
   await authServices.updateUser({ _id }, { subscription });
   res.status(204).end();
 };
