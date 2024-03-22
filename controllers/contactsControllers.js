@@ -1,58 +1,77 @@
 import HttpError from "../helpers/HttpError.js";
 import { controllerWraper } from "../helpers/controllerWraper.js";
-import {
-  addContacts,
-  deleteContactById,
-  getAllContacts,
-  getContactById,
-  updateContactById,
-  updateStatusContactById,
-} from "../services/contactsServices.js";
-const getAll = async (_, res) => {
-  const result = await getAllContacts();
+import * as contactServices from "../services/contactsServices.js";
+const getAll = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite } = req.query;
+  const skip = (page - 1) * limit;
+
+  const filter = { owner };
+  if (favorite) {
+    filter.favorite = favorite;
+  }
+
+  const result = await contactServices.getAllContacts(filter, { skip, limit });
   res.json(result);
 };
 
 const getOneContact = async (req, res) => {
-  const { id } = req.params;
-  const result = await getContactById(id);
+  const { id: _id } = req.params;
+  const { id: owner } = req.user;
+  const result = await contactServices.getOneContact({ _id, owner });
   if (!result) {
-    throw HttpError(404, `Contact with id=${id} not found`);
+    throw HttpError(404, `Contact with id=${_id} not found`);
   }
-  res.status(200).json(result);
+  res.json(result);
 };
 
 const createContact = async (req, res) => {
-  const result = await addContacts(req.body);
+  const { _id: owner } = req.user;
+  const result = await contactServices.addContacts({ ...req.body, owner });
+
   res.status(201).json(result);
 };
 
 const updateContact = async (req, res) => {
-  const { id } = req.params;
-  const result = await updateContactById(id, req.body);
+  const { id: _id } = req.params;
+  const { id: owner } = req.user;
+  const result = await contactServices.updateOneContact(
+    { _id, owner },
+    req.body
+  );
+
   if (!result) {
     throw HttpError(404);
   }
-  res.status(200).json(result);
+
+  res.json(result);
 };
 
 const deleteContact = async (req, res) => {
-  const { id } = req.params;
-  const result = await deleteContactById(id);
-  console.log("result: ", result);
+  const { id: _id } = req.params;
+  const { id: owner } = req.user;
+  const result = await contactServices.deleteOneContact({ _id, owner });
+
   if (!result) {
     throw HttpError(404);
   }
-  res.status(200).json(result);
+
+  res.json(result);
 };
 
 const updateStatusContact = async (req, res) => {
-  const { id } = req.params;
-  const result = await updateStatusContactById(id, req.body);
+  const { id: _id } = req.params;
+  const { id: owner } = req.user;
+  const result = await contactServices.updateOneContact(
+    { _id, owner },
+    req.body
+  );
+
   if (!result) {
     throw HttpError(404);
   }
-  res.status(200).json(result);
+
+  res.json(result);
 };
 
 export default {
