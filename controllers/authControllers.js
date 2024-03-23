@@ -8,21 +8,20 @@ const { JWT_SEKRET } = process.env;
 
 const register = async (req, res) => {
   const { email } = req.body;
-  const url = gravatar.url(`${email}`, { s: "100", r: "x", d: "retro" }, false);
-  // const user = await authServices.findUser({ email });
-  console.log("url: ", url);
+  const avatarURL = gravatar.url(email);
+  const user = await authServices.findUser({ email });
 
-  // if (user) {
-  //   throw HttpError(409, "Email in use");
-  // }
+  if (user) {
+    throw HttpError(409, "Email in use");
+  }
 
-  // const newUser = await authServices.register(req.body);
-  // res.status(201).json({
-  //   user: {
-  //     email: newUser.email,
-  //     subscription: "starter",
-  //   },
-  // });
+  const newUser = await authServices.register({ ...req.body, avatarURL });
+  res.status(201).json({
+    user: {
+      email: newUser.email,
+      subscription: "starter",
+    },
+  });
 };
 
 const login = async (req, res) => {
@@ -80,11 +79,12 @@ const updateUserSubscription = async (req, res) => {
   await authServices.updateUser({ _id }, { subscription });
   res.status(204).end();
 };
-
+const avatars = async (req, res) => {};
 export default {
   register: controllerWraper(register),
   login: controllerWraper(login),
   getCurrent: controllerWraper(getCurrent),
   logout: controllerWraper(logout),
   updateUserSubscription: controllerWraper(updateUserSubscription),
+  avatars: controllerWraper(avatars),
 };
