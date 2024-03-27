@@ -101,7 +101,7 @@ const avatars = async (req, res) => {
   const user = await authServices.updateUser({ _id }, { avatarURL });
 
   res.json({
-    avatarURL: user.avatarURL,
+    avatarURL,
   });
 };
 export default {
