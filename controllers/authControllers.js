@@ -93,7 +93,7 @@ const avatars = async (req, res) => {
   const newPath = path.join(avatarPath, filename);
 
   const image = await Jimp.read(oldPath);
-  await image.resize(250, 250).writeAsync(newPath);
+  await image.resize(250, 250).writeAsync(oldPath);
 
   await fs.rename(oldPath, newPath);
 
