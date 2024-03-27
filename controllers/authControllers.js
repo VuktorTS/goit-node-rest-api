@@ -89,8 +89,6 @@ const avatars = async (req, res) => {
   if (!req.file) {
     throw HttpError(400, "Avatar not found");
   }
-  // const { path: oldPath, filename } = req.file;
-  // const newPathAvatar = path.join(avatarPath, filename);
   const {path: oldPath, filename} = req.file;
   const newPath = path.join(avatarPath, filename);
 
