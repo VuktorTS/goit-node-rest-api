@@ -5,7 +5,6 @@ import { findUser } from "../services/authServices.js";
 const { JWT_SEKRET } = process.env;
 
 const authenticate = async (req, res, next) => {
-  console.log("auth");
   const { authorization } = req.headers;
 
   if (!authorization) {

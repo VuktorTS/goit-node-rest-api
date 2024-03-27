@@ -3,8 +3,12 @@ import * as authServices from "../services/authServices.js";
 import { controllerWraper } from "../helpers/controllerWraper.js";
 import HttpError from "../helpers/HttpError.js";
 import gravatar from "gravatar";
+import Jimp from "jimp";
+import path from "path";
+import fs from "fs/promises";
 
 const { JWT_SEKRET } = process.env;
+const avatarPath = path.resolve("public", "avatars");
 
 const register = async (req, res) => {
   const { email } = req.body;
@@ -79,7 +83,29 @@ const updateUserSubscription = async (req, res) => {
   await authServices.updateUser({ _id }, { subscription });
   res.status(204).end();
 };
-const avatars = async (req, res) => {};
+const avatars = async (req, res) => {
+  const { _id } = req.user;
+
+  if (!req.file) {
+    throw HttpError(400, "Avatar not found");
+  }
+  // const { path: oldPath, filename } = req.file;
+  // const newPathAvatar = path.join(avatarPath, filename);
+  const {path: oldPath, filename} = req.file;
+  const newPath = path.join(avatarPath, filename);
+
+  const image = await Jimp.read(oldPath);
+  await image.resize(250, 250).writeAsync(newPath);
+
+  await fs.rename(oldPath, newPath);
+
+  const avatarURL = path.join("avatars", filename);
+  const user = await authServices.updateUser({ _id }, { avatarURL });
+
+  res.json({
+    avatarURL: user.avatarURL,
+  });
+};
 export default {
   register: controllerWraper(register),
   login: controllerWraper(login),
